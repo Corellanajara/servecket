@@ -41,6 +41,10 @@ io.on('connection', client => {
         client.emit('res',{res:stdout});
     });
   })
+  client.on('notif',dato=>{
+   console.log('dato',dato);
+  client.emit('notificacionLocal',{red:dato});
+  })
   client.on('disconnect', () => {
       console.log("se fue el cliente");
   });
