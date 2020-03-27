@@ -5,56 +5,54 @@ const { exec } = require("child_process");
 const readline = require("readline");
 const os_utils 	= require('os-utils');
 var request = require("request");
-var fs = require('fs');
-var login = [];
-var idUsuario = "No es un usuario real ni autenticado";
-fs.readFile('conf.txt','utf8', function(err, contents) {
-    var partes = contents.split('\n');
-    var usuario = ["user","pass","port"];
-    var login = [];
-    for(var i = 0 ; i < partes.length;i++){
-	     var parte = partes[i];
-	      var contenido = parte.split("=")[1];
-	      login.push(contenido);
-        if(i == partes.length -1){
-          iniciar(login);
-        }
-    }
-    console.log("pido iniciar");
-    console.log(login);
+
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
 });
 
-function iniciar(l){
-  console.log("login",l);
-  var obj = {
-      "correo": "asfa"+l[0],
-      "clave": "asfa"+l[1]
-    }
-  console.log("obj",obj);
-  request.post({
-        "headers": { "content-type": "application/json" },
-        "url": "http://178.128.71.20:8080/auth/",
-        "body": JSON.stringify({
-            "correo": l[0],
-            "clave": l[1]
-        })
-    }, (error, response, body) => {
-        var resultado = JSON.parse(body);
-        if(error) {
-            return console.dir(error);
-        }
-        if(resultado){
-          console.log("body",resultado);
-          idUsuario = resultado.userId;
-          console.log("id del usuario traido",idUsuario);
-          console.log("id del usuario traido",resultado.userId);
-          server.listen(l[2]);
-        }else {
-          console.log("body",resultado.length);
-          throw "no pudo inicializarse correctamente";
-        }
+
+var idUsuario = "No es un usuario real ni autenticado";
+rl.question("Dame tu correo ", function(correo) {
+    rl.question("Clave ", function(clave) {
+          request.post({
+                "headers": { "content-type": "application/json" },
+                "url": "http://178.128.71.20:8080/auth/",
+                "body": JSON.stringify({
+                    "correo": correo,
+                    "clave": clave
+                })
+            }, (error, response, body) => {
+                if(error) {
+                    return console.dir(error);
+                }
+                if(body){
+                  console.log(typeof(body));
+                  var usuario = JSON.parse(body);
+                  console.log("body",body);
+                  idUsuario = usuario.userId;
+                  console.log("id del usuario traido",idUsuario);
+                  console.log("id del usuario traido",usuario.userId);
+                  rl.question("Super! que puerto uso? R : ", function(puerto) {
+                    var texto = "user="+correo;
+                    texto += "\npass="+clave;
+                    texto += "\nport="+puerto;
+                    fs = require('fs');
+                    fs.writeFile('conf.txt', texto, function (err) {
+                      if (err) return console.log(err);
+                      console.log('OK! ahora puedes ejecutar node index.js');
+                    });
+                    //server.listen(puerto);
+                  })
+
+                }else {
+                  console.log("body",resultado.length);
+                  throw "no pudo inicializarse correctamente";
+                }
+            });
     });
-}
+});
 
 function serviceStatus(client,service){
     exec("service "+service+" status", function(error, stdout){
@@ -112,7 +110,6 @@ io.on('connection', client => {
       serviceStatus(client,"cron");
       serviceStatus(client,"sshd");
     }
-
 
   })
   client.on('ejecutar', data=>{
