@@ -1,5 +1,5 @@
 const server = require('http').createServer();
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { origins: '*:*'});
 var os = require('os');
 const { exec } = require("child_process");
 const readline = require("readline");
@@ -8,7 +8,7 @@ var request = require("request");
 var fs = require('fs');
 var login = [];
 var idUsuario = "No es un usuario real ni autenticado";
-fs.readFile('conf.txt','utf8', function(err, contents) {
+fs.readFile('docs/conf.txt','utf8', function(err, contents) {
     var partes = contents.split('\n');
     var usuario = ["user","pass","port"];
     var login = [];

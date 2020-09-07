@@ -39,7 +39,7 @@ rl.question("Dame tu correo ", function(correo) {
                     texto += "\npass="+clave;
                     texto += "\nport="+puerto;
                     fs = require('fs');
-                    fs.writeFile('conf.txt', texto, function (err) {
+                    fs.writeFile('docs/conf.txt', texto, function (err) {
                       if (err) return console.log(err);
                       console.log('OK! ahora puedes ejecutar node index.js');
                     });

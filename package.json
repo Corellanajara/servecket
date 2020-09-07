@@ -1,13 +1,18 @@
 {
-  "name": "serviapp",
+  "name": "MajusApp",
   "version": "1.0.0",
-  "description": "",
-  "main": "socket.js",
+  "description": "control every aspect of your server remotely",
+  "main": "socketMajus.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vase",
   "license": "ISC",
+  "node_deb": {
+    "entrypoints": {
+      "daemon": "socketMajus.js"
+    }
+  },
   "dependencies": {
     "express": "^4.17.1",
     "node-deb": "^0.10.7",
