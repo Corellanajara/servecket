@@ -13,7 +13,7 @@
     "node-deb": "^0.10.7",
     "os-utils": "0.0.14",
     "request": "^2.88.2",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "upstart": "0.0.2"
   }
 }
