@@ -9,7 +9,7 @@
   "author": "Vase",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "node-deb": "^0.10.7",
     "os-utils": "0.0.14",
     "request": "^2.88.2",
